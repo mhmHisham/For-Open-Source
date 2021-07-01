@@ -1,0 +1,71 @@
+//dotted animation -react-native
+
+//hook
+const scrollX =new Animated.Value(0) //initial value is 0
+
+//function
+
+function renderDot(){
+	
+	const dotPosition = Animated.Divide(scrollX , SIZES.width)  //here SIZES.width a size of width
+	
+	return(
+		<View style={{ height: 30}}>
+			<View style={{
+				alignItems:'center',
+				flexDirection:'row',
+				justifyContent:'center',
+				height:SIZES.padding, 
+			}}>
+				{resturant?.menu.map((item, index) => {      ///from resturant lists menu items and index
+					
+					const opacity = dotPosition.interpolate({
+						inputRange :[index -1 , index , index +1]
+						outputRange :[0.3, 1 , 0.3],
+						extrapolate: 'clamp'
+					}) 
+					
+					const dotSize = dotPosition.interpolate({
+						inputRange : [index -1 , index , index],
+						outputRange : [SIZES.base*0.8 , 10 , SIZES.base*0.8]
+						extrapolate:'clamp'
+					})
+					
+					const dotColor = dotPosition.interpolate({
+						inputRange :[index -1 , index , index +1],
+						outputRange:[COLORS.darkgray , COLORS.PRIMARY , COLORS.darkgray]
+						extrapolate :'clamp'
+					})
+					
+					return(
+						<Animated.View
+							key={`dot-${index}`}
+							opacity={opacity}
+							style={{
+								marginHorizontal :6,
+								borderRadius: SIZES.radius,
+								height:dotSize,
+								width:dotSize,
+								backgroundColor:dotColor
+							}}
+						/>
+					)
+				})}
+			</View>
+		</View>
+	)
+}
+
+
+
+/// to work with the have to implement with onScroll
+<Animated.ScrollView
+	-----
+	----
+	----
+	onScroll={Animated.event([
+		{nativeEvent :{contentOffset:{x:scrollX}}}
+	],{useNativeDriver:false} )}
+> 	
+	.......blah...blah......
+</Animated.ScrollView>	
